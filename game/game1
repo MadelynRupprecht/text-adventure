@@ -1,0 +1,285 @@
+import random
+
+# CHECKLIST
+# add a name to player
+# add more to buy
+
+
+class Player:
+    def __init__(self):
+        self.health = 50  # Starting health at level 1
+        self.max_health = 50
+        self.level = 1
+        self.exp = 0
+        self.treasures = 0
+        self.money = 0
+        self.companion = None  # Romance aspect
+        self.relationship_level = 0  # Relationship level with companion
+        self.weapon = None  # Weapon equipped
+        self.shield = None  # Shield equipped
+   
+    def gain_exp(self, amount):
+        self.exp += amount
+        if self.exp >= self.level * 10:
+            self.level_up()
+   
+    def level_up(self):
+        self.level += 1
+        self.max_health += 20
+        self.health += 20
+        self.exp = 0
+        print(f"You leveled up! You are now level {self.level} and have {self.health} health!")
+        if self.level == 5:
+            print("Congratulations! You have become the ruler of the kingdom!")
+            print("The game ends here. Well done!")
+            exit()
+   
+    def take_damage(self, amount):
+        self.health -= amount
+        if self.health <= 0:
+            print("You have died... Game Over.")
+            exit()
+   
+    def heal(self):
+        if self.treasures > 0:
+            self.health += 20
+            if self.health > self.max_health:
+                self.health = self.max_health
+            self.treasures -= 1
+            print(f"You used a treasure to heal! Your health is now {self.health}.")
+        else:
+            print("You have no treasures to heal with!")
+   
+    def train(self):
+        proceed = input(f"It costs 5 gold to train. Proceed? (yes/no)").lower()
+        if proceed == "yes":
+            if self.money >= 5:
+                print("You spend time training, gaining experience. 🏋️")
+                self.money -= 5
+                self.gain_exp(3)
+            else:
+                print("You do not have enough money to train.")
+   
+    def rest(self):
+        pro = input(f"It costs 7 gold to buy a room. Proceed? (yes/no)")
+        if pro == "yes":
+            if self.money >= 7:
+                print("You rest and regain some health.")
+                self.money -= 7
+                self.health += 10
+                if self.health > self.max_health:
+                    self.health = self.max_health  # Max health with level scaling
+            else:
+                print("You do not have enough money to rest.")
+   
+    def meet_companion(self):
+        companions = ["Elara, the Mysterious Sorceress", "Dain, the Rogue with a Heart of Gold", "Lyra, the Brave Warrior", "Tyrus, the Handsome Elf", "Fiona, the Famous Slayer", "Tanner, the Tan Tailor"]
+        self.companion = random.choice(companions)
+        self.relationship_level = 1
+        print(f"You meet {self.companion}! They decide to accompany you on your journey.")
+       
+        reject = input(f"Do you want to accept {self.companion} as your companion? (yes/no): ").lower()
+        if reject == "no":
+            print(f"You decided to reject {self.companion} and continue on your own.")
+            self.companion = None
+            self.relationship_level = 0
+   
+    def deepen_relationship(self):
+        if self.companion and self.relationship_level < 10:
+            self.relationship_level += 1
+            relationship_stages = [
+                "Acquaintances", "Casual Friends", "Friends", "Good Friends",
+                "Flirting", "Dating", "In a Relationship", "Committed",
+                "Engaged", "Soulmates"
+            ]
+            print(f"Your bond with {self.companion} has grown! Relationship Status: {relationship_stages[self.relationship_level - 1]}")
+        elif self.companion:
+            print(f"You and {self.companion} are already soulmates!")
+   
+    def buy_item(self, item):
+        if self.money >= item['price']:
+            self.money -= item['price']
+            if item['type'] == 'weapon':
+                self.weapon = item['name']
+                print(f"You bought a {self.weapon}! Attack increased!")
+            elif item['type'] == 'shield':
+                self.shield = item['name']
+                print(f"You bought a {self.shield}! Defense increased!")
+            elif item['type'] == 'potion':
+                self.health += item['healing']
+                if self.health > self.max_health:
+                    self.health = self.max_health
+                print(f"You bought a {item['name']} and restored {item['healing']} health!")
+        else:
+            print("You don't have enough money to buy this item.")
+
+    def lost(self):
+        print("You got lost while exploring...")
+
+    def traveller(self):
+        print("You meet a kind stranger and they give you some tips.")
+        self.gain_exp(5)
+
+
+def fight_enemy(player):
+    # Enemies get stronger as you level up
+    enemies = [
+        {"name": "Goblin", "level": 1, "health": 20, "damage": 5},
+        {"name": "Wolf", "level": 1, "health": 20, "damage": 15},
+        {"name": "Python", "level": 1, "health": 30, "damage": 10},
+        {"name": "Corpse", "level": 1, "health": 10, "damage": 5},
+        {"name": "Skeleton", "level": 2, "health": 30, "damage": 8},
+        {"name": "Orc", "level": 3, "health": 40, "damage": 10},
+        {"name": "Dark Mage", "level": 4, "health": 50, "damage": 12},
+        {"name": "Dragon", "level": 5, "health": 80, "damage": 20},
+        {"name": "Vampire", "level": 6, "health": 60, "damage": 18},
+        {"name": "Zombie Horde", "level": 2, "health": 25, "damage": 7},
+        {"name": "Werewolf", "level": 3, "health": 45, "damage": 12},
+        {"name": "Giant Spider", "level": 2, "health": 30, "damage": 6},
+        {"name": "Manticore", "level": 4, "health": 70, "damage": 15},
+        {"name": "Minotaur", "level": 5, "health": 85, "damage": 22},
+        {"name": "Necromancer", "level": 5, "health": 50, "damage": 25},
+        {"name": "Basilisk", "level": 6, "health": 60, "damage": 20},
+        {"name": "Griffin", "level": 7, "health": 100, "damage": 30},
+        {"name": "Phoenix", "level": 8, "health": 120, "damage": 35},
+        {"name": "Golem", "level": 6, "health": 80, "damage": 18}
+    ]
+   
+    # Select an enemy based on player level
+    possible_enemies = [enemy for enemy in enemies if enemy["level"] <= player.level]
+    enemy = random.choice(possible_enemies)
+   
+    print(f"A wild {enemy['name']} (Level {enemy['level']}) appears! HP: {enemy['health']} 🧟")
+   
+    action = input("Do you FIGHT, CAST a spell, or RUN? ").lower()
+   
+    if action == "fight":
+        if random.random() > 0.3:
+            print(f"You defeated the {enemy['name']}! 🎉")
+            player.gain_exp(5)
+            player.money += random.randint(1, 4)
+            return True
+        else:
+            print(f"The {enemy['name']} was too strong... You take {enemy['damage']} damage!")
+            player.take_damage(enemy['damage'])
+            player.gain_exp(1)
+            return False
+    elif action == "cast":
+        return cast_spell(player, enemy)
+    elif action == "run":
+        print("You escape safely!")
+        return False
+    else:
+        print("Invalid action! The enemy strikes while you hesitate!")
+        player.take_damage(10)
+        return False
+
+
+def cast_spell(player, enemy):
+    spells = {"fireball": 0.8, "lightning": 0.7, "frost": 0.6}
+    spell = input("Choose a spell (Fireball, Lightning, Frost): ").lower()
+    if spell in spells:
+        if random.random() < spells[spell]:
+            print(f"Your {spell.capitalize()} incinerates the {enemy['name']}!")
+            player.gain_exp(7)
+            player.money += random.randint(1, 4)
+            return True
+        else:
+            print(f"Your {spell.capitalize()} missed! The {enemy['name']} counterattacks!")
+            player.take_damage(15)
+            player.gain_exp(1)
+            return False
+    else:
+        print("You fumble the spell! The enemy strikes!")
+        player.take_damage(10)
+        return False
+
+
+def meet_trader(player):
+    trader_items = [
+        {"name": "Iron Sword", "type": "weapon", "price": 10, "attack": 5},
+        {"name": "Steel Shield", "type": "shield", "price": 8, "defense": 5},
+        {"name": "Healing Potion", "type": "potion", "price": 5, "healing": 30},
+    ]
+    print("You encounter a traveling trader!")
+    print(f"You have {player.money} gold.")
+    print("The trader offers:")
+    for i, item in enumerate(trader_items, 1):
+        print(f"{i}. {item['name']} - {item['price']} gold")
+   
+    choice = input("Which item would you like to buy? (1, 2, 3, or 'none' to leave): ").lower()
+    if choice in ['1', '2', '3']:
+        item = trader_items[int(choice) - 1]
+        player.buy_item(item)
+    else:
+        print("You decide to leave the trader for now.")
+
+#EXPLORE STUFF
+def explore(player):
+    locations = [
+        "a dark cave", "an ancient temple", "a ruined castle", "a misty forest",
+        "a flooded dungeon", "an abandoned village", "a haunted mansion",
+        "a crumbling tower", "a cursed graveyard", "a volcanic region"
+    ]
+    print(f"You enter {random.choice(locations)}...")
+   
+    event_chance = random.random()
+   
+    # Less frequent money found, and smaller amounts
+    if event_chance > 0.9:
+        print("You find some money!")
+        player.money += random.randint(1, 10)  # Less money found
+        return False
+    elif event_chance > 0.7:
+        if player.companion is None:
+            player.meet_companion()
+        else:
+            player.deepen_relationship()
+        return False
+    elif event_chance > 0.6:
+        print("You find a hidden treasure!")
+        player.treasures += 1
+        return False
+    elif event_chance > 0.5:
+        meet_trader(player)
+        return False
+    elif event_chance > 0.4:
+        player.lost()
+    elif event_chance > 0.3:
+        player.traveller()
+    else:
+        return fight_enemy(player)
+
+
+def play_game():
+    print("Welcome to the Dungeon Adventure!")
+    player = Player()
+   
+    while True:
+        print(f"\nHealth: {player.health}/ {player.max_health} | Level: {player.level} | EXP: {player.exp}/{player.level * 10} | Treasures: {player.treasures} | Money: {player.money}")
+        if player.companion:
+            relationship_stages = [
+                "Acquaintances", "Casual Friends", "Friends", "Good Friends",
+                "Flirting", "Dating", "In a Relationship", "Committed",
+                "Engaged", "Soulmates"
+            ]
+            print(f"Companion: {player.companion} | Relationship Status: {relationship_stages[player.relationship_level - 1]}")
+        choice = input("Do you want to EXPLORE, HEAL, TRAIN, REST, or QUIT? ").lower()
+        if choice == "explore":
+            explore(player)
+        elif choice == "heal":
+            player.heal()
+        elif choice == "train":
+            player.train()
+        elif choice == "rest":
+            player.rest()
+        elif choice == "quit":
+            print("Thanks for playing!")
+            break
+        else:
+            print("Invalid action! Please choose again.")
+
+
+if __name__ == "__main__":
+    play_game()
+
