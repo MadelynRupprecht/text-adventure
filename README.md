@@ -1,15 +1,14 @@
-Fantasy Text Adventure
+Fantasy Text Adventure: 
 Welcome to Fantasy Text Adventure, a Python-based role-playing game where you embark on an epic quest filled with battles, romance, and treasure!
 
 
-Game Overview
+Game Overview: 
 You start your journey as a young adventurer with limited health, no weapons, and no companions. Your goal is to survive battles, collect treasures, deepen relationships, and eventually rise to become the ruler of the kingdom!
-
 
 Level up by gaining experience through training, fighting enemies, meeting companions, and trading with merchants. Beware, for if your health drops to zero, the game is over!
 
 
-Features
+Features: 
 Leveling System: Gain experience and health as you grow stronger.
 
 Battle Mechanics: Fight against goblins, dragons, necromancers, and more.
@@ -27,7 +26,7 @@ Resource Management: Spend your gold wisely to train, heal, and upgrade your equ
 Multiple Paths: Choose to fight, cast spells, run away, or get lost in exploration.
 
 
-How to Play
+How to Play: 
 Run the Game:
 Make sure you have Python 3 installed. Then, simply run the script:
 
@@ -54,7 +53,7 @@ Victory Condition:
 Reach Level 5 to become the ruler of the kingdom and win the game!
 
 
-Mechanics in Detail
+Mechanics in Detail: 
 Fighting Enemies:
 Choose to fight, cast spells, or flee. Defeating enemies grants experience and gold.
 
@@ -71,7 +70,7 @@ Training & Resting:
 Spend gold to train for XP or heal at inns.
 
 
-Requirements
+Requirements: 
 Python 3.x
 
 No external libraries needed (uses only built-in random and input() functions)
