@@ -1,13 +1,12 @@
 import random
 
-# CHECKLIST
-# add a name to player
-# add more to buy
+# Fantasy text adventure game
 
 
+# Initial player stats
 class Player:
     def __init__(self):
-        self.health = 50  # Starting health at level 1
+        self.health = 50  # Starting health 
         self.max_health = 50
         self.level = 1
         self.exp = 0
@@ -17,12 +16,14 @@ class Player:
         self.relationship_level = 0  # Relationship level with companion
         self.weapon = None  # Weapon equipped
         self.shield = None  # Shield equipped
-   
+
+# XP
     def gain_exp(self, amount):
         self.exp += amount
         if self.exp >= self.level * 10:
             self.level_up()
-   
+
+# Level up
     def level_up(self):
         self.level += 1
         self.max_health += 20
@@ -33,13 +34,15 @@ class Player:
             print("Congratulations! You have become the ruler of the kingdom!")
             print("The game ends here. Well done!")
             exit()
-   
+
+# Take damage
     def take_damage(self, amount):
         self.health -= amount
         if self.health <= 0:
             print("You have died... Game Over.")
             exit()
-   
+
+# Healing
     def heal(self):
         if self.treasures > 0:
             self.health += 20
@@ -49,17 +52,19 @@ class Player:
             print(f"You used a treasure to heal! Your health is now {self.health}.")
         else:
             print("You have no treasures to heal with!")
-   
+
+# Training
     def train(self):
         proceed = input(f"It costs 5 gold to train. Proceed? (yes/no)").lower()
         if proceed == "yes":
             if self.money >= 5:
-                print("You spend time training, gaining experience. 🏋️")
+                print("You spend time training, gaining experience.")
                 self.money -= 5
                 self.gain_exp(3)
             else:
                 print("You do not have enough money to train.")
-   
+
+# Resting
     def rest(self):
         pro = input(f"It costs 7 gold to buy a room. Proceed? (yes/no)")
         if pro == "yes":
@@ -68,10 +73,11 @@ class Player:
                 self.money -= 7
                 self.health += 10
                 if self.health > self.max_health:
-                    self.health = self.max_health  # Max health with level scaling
+                    self.health = self.max_health  # Max health
             else:
                 print("You do not have enough money to rest.")
-   
+
+# Meet companion
     def meet_companion(self):
         companions = ["Elara, the Mysterious Sorceress", "Dain, the Rogue with a Heart of Gold", "Lyra, the Brave Warrior", "Tyrus, the Handsome Elf", "Fiona, the Famous Slayer", "Tanner, the Tan Tailor"]
         self.companion = random.choice(companions)
@@ -83,7 +89,8 @@ class Player:
             print(f"You decided to reject {self.companion} and continue on your own.")
             self.companion = None
             self.relationship_level = 0
-   
+
+#Companion relationship
     def deepen_relationship(self):
         if self.companion and self.relationship_level < 10:
             self.relationship_level += 1
@@ -95,7 +102,8 @@ class Player:
             print(f"Your bond with {self.companion} has grown! Relationship Status: {relationship_stages[self.relationship_level - 1]}")
         elif self.companion:
             print(f"You and {self.companion} are already soulmates!")
-   
+
+# Buy items
     def buy_item(self, item):
         if self.money >= item['price']:
             self.money -= item['price']
@@ -113,16 +121,18 @@ class Player:
         else:
             print("You don't have enough money to buy this item.")
 
+# Lost
     def lost(self):
         print("You got lost while exploring...")
 
+# Traveller training
     def traveller(self):
         print("You meet a kind stranger and they give you some tips.")
         self.gain_exp(5)
 
 
+#Fighting
 def fight_enemy(player):
-    # Enemies get stronger as you level up
     enemies = [
         {"name": "Goblin", "level": 1, "health": 20, "damage": 5},
         {"name": "Wolf", "level": 1, "health": 20, "damage": 15},
@@ -145,7 +155,7 @@ def fight_enemy(player):
         {"name": "Golem", "level": 6, "health": 80, "damage": 18}
     ]
    
-    # Select an enemy based on player level
+    # Selects enemy based on player level
     possible_enemies = [enemy for enemy in enemies if enemy["level"] <= player.level]
     enemy = random.choice(possible_enemies)
    
@@ -174,7 +184,7 @@ def fight_enemy(player):
         player.take_damage(10)
         return False
 
-
+# Spell casting
 def cast_spell(player, enemy):
     spells = {"fireball": 0.8, "lightning": 0.7, "frost": 0.6}
     spell = input("Choose a spell (Fireball, Lightning, Frost): ").lower()
@@ -194,7 +204,7 @@ def cast_spell(player, enemy):
         player.take_damage(10)
         return False
 
-
+# Meeting trader/store
 def meet_trader(player):
     trader_items = [
         {"name": "Iron Sword", "type": "weapon", "price": 10, "attack": 5},
@@ -214,7 +224,7 @@ def meet_trader(player):
     else:
         print("You decide to leave the trader for now.")
 
-#EXPLORE STUFF
+#EXPLORE STUFF!!!
 def explore(player):
     locations = [
         "a dark cave", "an ancient temple", "a ruined castle", "a misty forest",
@@ -224,11 +234,13 @@ def explore(player):
     print(f"You enter {random.choice(locations)}...")
    
     event_chance = random.random()
-   
-    # Less frequent money found, and smaller amounts
+
+
+   # This decides what happens each time player explores vvv
+
     if event_chance > 0.9:
         print("You find some money!")
-        player.money += random.randint(1, 10)  # Less money found
+        player.money += random.randint(1, 10)  
         return False
     elif event_chance > 0.7:
         if player.companion is None:
@@ -250,11 +262,12 @@ def explore(player):
     else:
         return fight_enemy(player)
 
-
+# Start of game
 def play_game():
     print("Welcome to the Dungeon Adventure!")
     player = Player()
-   
+
+# Display stats
     while True:
         print(f"\nHealth: {player.health}/ {player.max_health} | Level: {player.level} | EXP: {player.exp}/{player.level * 10} | Treasures: {player.treasures} | Money: {player.money}")
         if player.companion:
